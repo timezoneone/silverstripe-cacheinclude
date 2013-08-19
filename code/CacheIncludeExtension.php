@@ -2,6 +2,8 @@
 
 use Heyday\CacheInclude\CacheInclude;
 use Heyday\CacheInclude\Processors\ViewableDataProcessor;
+use Heyday\CacheInclude\KeyCreators\SilverStripeController;
+use Heyday\CacheInclude\KeyCreators\KeyCreatorInterface;
 
 /**
  * Class CacheIncludeExtension
@@ -20,15 +22,19 @@ class CacheIncludeExtension extends Extension
      * @var array
      */
     private static $run = array();
+
     /**
-     * @param Heyday\CacheInclude\CacheInclude                     $cache
-     * @param Heyday\CacheInclude\Processors\ViewableDataProcessor $processor
+     * @param CacheInclude          $cache
+     * @param ViewableDataProcessor $processor
+     * @param KeyCreatorInterface   $keyCreator
      */
     public function __construct(
         CacheInclude $cache,
-        ViewableDataProcessor $processor
+        ViewableDataProcessor $processor,
+        KeyCreatorInterface $keyCreator = null
     ) {
         $this->cache = $cache;
+        $this->keyCreator = $keyCreator ?: new SilverStripeController($this->getController());
         $this->processor = $processor;
         parent::__construct();
     }
@@ -58,7 +64,7 @@ class CacheIncludeExtension extends Extension
             function () use ($template, $controller) {
                 return $controller->renderWith(new SSViewer_FromString($template));
             },
-            $controller
+            $this->keyCreator
         );
     }
     /**
@@ -70,7 +76,7 @@ class CacheIncludeExtension extends Extension
         return $this->cache->process(
             $name,
             $this->processor->setContext($this->owner),
-            $this->getController()
+            $this->keyCreator
         );
     }
     /**

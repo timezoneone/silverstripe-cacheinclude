@@ -5,6 +5,7 @@ namespace Heyday\CacheInclude;
 use Controller;
 use DataModel;
 use Director;
+use Heyday\CacheInclude\KeyCreators\SilverStripeController;
 use RequestFilter;
 use Requirements;
 use SecurityToken;
@@ -122,7 +123,7 @@ class RequestCache implements RequestFilter
     {
         if (!$this->isExcluded($request)) {
             \Versioned::choose_site_stage();
-            $response = $this->cache->get($this->name, $this->getController($request));
+            $response = $this->cache->get($this->name, new SilverStripeController($this->getController($request)));
             if ($response instanceof SS_HTTPResponse) {
                 // replace in body
                 if ($this->hasTokens()) {
@@ -170,7 +171,7 @@ class RequestCache implements RequestFilter
             $this->cache->set(
                 $this->name,
                 $response,
-                $this->getController($request)
+                new SilverStripeController($this->getController($request))
             );
         }
 

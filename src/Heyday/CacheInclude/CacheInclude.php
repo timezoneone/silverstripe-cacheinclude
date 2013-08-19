@@ -2,8 +2,8 @@
 
 namespace Heyday\CacheInclude;
 
-use CacheCache\Cache;
-use Controller;
+use Stash\Item;
+use Stash\Pool;
 use Heyday\CacheInclude\Configs\ConfigInterface;
 use Heyday\CacheInclude\KeyCreators\KeyCreatorInterface;
 use Heyday\CacheInclude\Processors\ProcessorInterface;
@@ -16,11 +16,7 @@ use RuntimeException;
 class CacheInclude
 {
     /**
-     * @var KeyCreatorInterface
-     */
-    protected $keyCreator;
-    /**
-     * @var \CacheCache\Cache
+     * @var \Stash\Pool
      */
     protected $cache;
     /**
@@ -46,19 +42,16 @@ class CacheInclude
     );
 
     /**
-     * @param Cache               $cache
-     * @param KeyCreatorInterface $keyCreator
+     * @param Pool                $cache
      * @param ConfigInterface     $config
      * @param bool                $forceExpire
      */
     public function __construct(
-        Cache $cache,
-        KeyCreatorInterface $keyCreator,
+        Pool $cache,
         ConfigInterface $config,
         $forceExpire = false
     ) {
         $this->cache = $cache;
-        $this->keyCreator = $keyCreator;
         $this->config = $config;
         $this->forceExpire = $forceExpire;
     }
@@ -137,127 +130,80 @@ class CacheInclude
     }
 
     /**
-     * @param                            $name
-     * @param                            $processor
-     * @param  \Controller               $controller
+     * @param                     $name
+     * @param                     $processor
+     * @param KeyCreatorInterface $keyCreator
      * @return mixed|null
      * @throws \InvalidArgumentException
      */
-    public function process($name, $processor, Controller $controller)
+    public function process($name, $processor, KeyCreatorInterface $keyCreator)
     {
         if (!$processor instanceof ProcessorInterface && !is_callable($processor)) {
             throw new \InvalidArgumentException('The argument $processor must be an instance of ProcessorInterface or a callable');
+        }
+        
+        if (!$keyCreator instanceof KeyCreatorInterface) {
+            throw new \InvalidArgumentException('Cache include must have a key creator set in order to generate keys');
         }
 
         if (!$this->enabled) {
             return $processor($name);
         }
-
-        $config = $this->getCombinedConfig($name);
-
-        $key = $this->keyCreator->getKey(
+        
+        $key = $keyCreator->getKey(
             $name,
-            $controller,
-            $config
+            $config = $this->getCombinedConfig($name)
         );
-
-        if ($this->forceExpire || ($result = $this->cache->get($key)) === null) {
-
-            if (isset($config['expires']) && is_string($config['expires'])) {
-                $expires = strtotime($config['expires']) - date('U');
-            } else {
-                $expires = null;
-            }
-
+        
+        $item = $this->cache->getItem($key);
+        $result = $item->get();
+        
+        if ($this->forceExpire) {
+            $item->clear();
+            $this->removeStoredKey($name, $key);
             $result = $processor($name);
-
-            if ($this->forceExpire) {
-
-                $this->removeByKey($name, $key);
-
-            } else {
-
-                $this->addByKey($name, $key, $result, $expires);
-
-            }
-
+        } elseif ($item->isMiss()) {
+            $result = $processor($name);
+            $item->set($result, $this->getExpiry($config));
+            $this->addStoredKey($name, $key);
         }
 
         return $result;
     }
-    /**
-     * @param             $name
-     * @param  Controller $controller
-     * @return mixed|null
-     */
-    public function get($name, Controller $controller)
-    {
-        if (!$this->enabled) {
-            return null;
-        }
 
-        $key = $this->keyCreator->getKey(
+    /**
+     * @param                     $name
+     * @param KeyCreatorInterface $keyCreator
+     * @return mixed
+     */
+    public function get($name, KeyCreatorInterface $keyCreator)
+    {
+        $key = $keyCreator->getKey(
             $name,
-            $controller,
             $this->getCombinedConfig($name)
         );
-
-        if ($this->forceExpire) {
-            $this->removeByKey($name, $key);
-        }
-
-        return $this->cache->get($key);
+        
+        return $this->cache->getItem($key)->get();
     }
+
     /**
-     * @param            $name
-     * @param            $result
-     * @param Controller $controller
+     * @param                     $name
+     * @param                     $result
+     * @param KeyCreatorInterface $keyCreator
      */
-    public function set($name, $result, Controller $controller)
+    public function set($name, $result, KeyCreatorInterface $keyCreator)
     {
         if (!$this->enabled) {
             return;
         }
-
+        
         $key = $this->keyCreator->getKey(
             $name,
-            $controller,
             $config = $this->getCombinedConfig($name)
         );
 
-        if (isset($config['expires']) && is_string($config['expires'])) {
-            $expires = strtotime($config['expires']) - date('U');
-        } else {
-            $expires = null;
-        }
-
-        $this->addByKey($name, $key, $result, $expires);
-    }
-    /**
-     * @param $name
-     * @param $key
-     * @param $result
-     * @param $expires
-     */
-    protected function addByKey($name, $key, $result, $expires)
-    {
-        $this->cache->set(
-            $key,
-            $result,
-            $expires
-        );
-
+        $this->cache->getItem($key)->set($result, $this->getExpiry($config));
         $this->addStoredKey($name, $key);
-    }
-
-    /**
-     * @param $name
-     * @param $key
-     */
-    protected function removeByKey($name, $key)
-    {
-        $this->cache->delete($key);
-        $this->removeStoredKey($name, $key);
     }
 
     /**
@@ -266,13 +212,11 @@ class CacheInclude
      */
     protected function addStoredKey($name, $key)
     {
-        $keys = $this->getStoredKeys($name);
-        if (!is_array($keys)) {
-            $keys = array();
-        }
-        if (!isset($keys[$key])) {
+        $item = $this->cache->getItem($name);
+        $keys = (array) $item->get();
+        if (!array_key_exists($key, $keys)) {
             $keys[$key] = true;
-            $this->cache->set($name, $keys);
+            $item->set($keys);
         }
     }
 
@@ -282,31 +226,12 @@ class CacheInclude
      */
     protected function removeStoredKey($name, $key)
     {
-        $keys = $this->getStoredKeys($name);
-        if (!is_array($keys)) {
-            $keys = array();
-        }
-        if (!isset($keys[$key])) {
+        $item = $this->cache->getItem($name);
+        $keys = (array) $item->get();
+        if (array_key_exists($key, $keys)) {
             unset($keys[$key]);
-            $this->cache->set($name, $keys);
+            $item->set($keys);
         }
-    }
-
-    /**
-     * @param $name
-     */
-    protected function resetStoredKeys($name)
-    {
-        $this->cache->set($name, array());
-    }
-
-    /**
-     * @param $name
-     * @return mixed|null
-     */
-    protected function getStoredKeys($name)
-    {
-        return $this->cache->get($name);
     }
 
     /**
@@ -314,10 +239,13 @@ class CacheInclude
      */
     public function flushByName($name)
     {
-        foreach ((array) $this->getStoredKeys($name) as $key => $value) {
-            $this->cache->delete($key);
+        $item = $this->cache->getItem($name);
+        $keys = array_keys((array) $this->cache->getItem($name)->get());
+        $iterator = $this->cache->getItemIterator($keys);
+        foreach ($iterator as $item) {
+            $item->clear();
         }
-        $this->resetStoredKeys($name);
+        $item->set(array());
     }
 
     /**
@@ -325,9 +253,21 @@ class CacheInclude
      */
     public function flushAll()
     {
-        $this->cache->flushAll();
-        foreach ($this->cache as $name => $config) {
-            $this->resetStoredKeys($name);
+        $this->cache->purge();
+    }
+    
+    /**
+     * @param $config
+     * @return \DateTime|null
+     */
+    protected function getExpiry($config)
+    {
+        if (isset($config['expires']) && is_string($config['expires'])) {
+            $expires = new \DateTime($config['expires']);
+        } else {
+            $expires = null;
         }
+
+        return $expires;
     }
 }
