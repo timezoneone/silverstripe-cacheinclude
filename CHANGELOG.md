@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.0.0
+
+* [BC BREAK] Migrated to new caching system [`Stash`](http://stash.tedivm.com/)
+
 ## 3.0.8
 
 * Only cache 200 status codes in global request cache
