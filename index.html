@@ -1,0 +1,373 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Silverstripe CacheInclude by heyday</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Silverstripe CacheInclude</h1>
+        <p>Fast Partial Caching for SilverStripe</p>
+
+        <p class="view"><a href="https://github.com/heyday/silverstripe-cacheinclude">View the Project on GitHub <small>heyday/silverstripe-cacheinclude</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/heyday/silverstripe-cacheinclude/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/heyday/silverstripe-cacheinclude/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/heyday/silverstripe-cacheinclude">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a name="silverstripe-cache-include" class="anchor" href="#silverstripe-cache-include"><span class="octicon octicon-link"></span></a>SilverStripe Cache Include</h1>
+
+<p><a href="https://travis-ci.org/heyday/silverstripe-cacheinclude"><img src="https://travis-ci.org/heyday/silverstripe-cacheinclude.svg?branch=master" alt="Build Status"></a></p>
+
+<p>Template caching based on urls not DB queries.</p>
+
+<h2>
+<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features</h2>
+
+<ul>
+<li>Cache keys are built from information available in request object (means no DB calls)</li>
+<li>Invalidation hooks for when DataObject's are modified</li>
+<li>Uses <code>doctrine/cache</code> library, providing many cache backends</li>
+<li>Uses Symfony Expression language for fine-grained invalidation control</li>
+<li>Support for <code>&lt;% cache %&gt;&lt;% end_cache %&gt;</code> syntax in templates</li>
+<li>A full request cache that includes the ability to substitute security tokens</li>
+<li>Highly customisable</li>
+</ul><p>For a SilverStripe <code>2.4</code> compatible version, see the <code>2.0.4</code> tag.</p>
+
+<h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>$ composer require silverstripe-cacheinclude:~4.0</p>
+
+<h2>
+<a name="how-to-use" class="anchor" href="#how-to-use"><span class="octicon octicon-link"></span></a>How to use</h2>
+
+<h3>
+<a name="enabling" class="anchor" href="#enabling"><span class="octicon octicon-link"></span></a>Enabling</h3>
+
+<p>To  be able to invalidate caches from DataObject writes, add the <code>InvalidationExtension</code>:</p>
+
+<ol>
+<li>Create a config file <code>mysite/_config/caching.yml</code>
+</li>
+<li>Add the following to the yml file</li>
+</ol><div class="highlight highlight-yml"><pre><span class="nn">---</span>
+<span class="l-Scalar-Plain">After</span><span class="p-Indicator">:</span> <span class="s">'silverstripe-cacheinclude/*'</span>
+<span class="nn">---</span>
+<span class="l-Scalar-Plain">DataObject</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">extensions</span><span class="p-Indicator">:</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">Heyday\CacheInclude\SilverStripe\InvalidationExtension</span>
+</pre></div>
+
+<h3>
+<a name="template-usage" class="anchor" href="#template-usage"><span class="octicon octicon-link"></span></a>Template Usage</h3>
+
+<p>Cache a section of a template:</p>
+
+<pre><code>&lt;% cache 'SomeCacheBlock' %&gt;
+&lt;% loop ExpensiveSet %&gt;&lt;% end_loop %&gt;
+&lt;% end_cache %&gt;
+</code></pre>
+
+<p>Cache an included template:</p>
+
+<pre><code>&lt;% cache_include 'SomeTemplateName' %&gt;
+</code></pre>
+
+<h3>
+<a name="cache-block-config" class="anchor" href="#cache-block-config"><span class="octicon octicon-link"></span></a>Cache block config</h3>
+
+<p>For each cache block that is used, you need a corresponding config provided to <code>CacheInclude</code>.</p>
+
+<p>The following is an example of a config for <code>SomeCacheBlock</code> and <code>AnotherCacheBlock</code>:</p>
+
+<p><code>mysite/_config/caching.yml</code></p>
+
+<div class="highlight highlight-yml"><pre><span class="nn">---</span>
+<span class="l-Scalar-Plain">After</span><span class="p-Indicator">:</span> <span class="s">'silverstripe-cacheinclude/*'</span>
+<span class="nn">---</span>
+<span class="l-Scalar-Plain">Injector</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">CacheIncludeConfig</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">class</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Heyday\CacheInclude\Configs\ArrayConfig</span>
+    <span class="l-Scalar-Plain">properties</span><span class="p-Indicator">:</span>
+      <span class="l-Scalar-Plain">Config</span><span class="p-Indicator">:</span>
+        <span class="l-Scalar-Plain">SomeCacheBlock</span><span class="p-Indicator">:</span>
+          <span class="l-Scalar-Plain">context</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">full</span>
+          <span class="l-Scalar-Plain">contains</span><span class="p-Indicator">:</span>
+            <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">MyDataObject</span>
+        <span class="l-Scalar-Plain">AnotherCacheBlock</span><span class="p-Indicator">:</span>
+          <span class="l-Scalar-Plain">context</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">no</span>
+          <span class="l-Scalar-Plain">expires</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">+1 hour</span>
+</pre></div>
+
+<h3>
+<a name="configuration-options" class="anchor" href="#configuration-options"><span class="octicon octicon-link"></span></a>Configuration options</h3>
+
+<p>Key creation options:</p>
+
+<h4>
+<a name="context" class="anchor" href="#context"><span class="octicon octicon-link"></span></a><code>context</code>
+</h4>
+
+<p>Context is a method to tell the key creator what information about the request to include in the created key.</p>
+
+<p>Possible values:</p>
+
+<ul>
+<li>
+<code>no</code>
+
+<ul>
+<li>Key created is independent of the request</li>
+</ul>
+</li>
+<li>
+<code>page</code>
+
+<ul>
+<li>Key is created based on url, but not including GET variables</li>
+</ul>
+</li>
+<li>
+<code>full</code>
+
+<ul>
+<li>Key is created based on url, including GET variables</li>
+</ul>
+</li>
+</ul><h4>
+<a name="expires" class="anchor" href="#expires"><span class="octicon octicon-link"></span></a><code>expires</code>
+</h4>
+
+<p>Possible values:</p>
+
+<ul>
+<li>(string)
+
+<ul>
+<li>A string to pass into strtotime e.g. '+1 hour'</li>
+</ul>
+</li>
+<li>(int)
+
+<ul>
+<li>A number of seconds</li>
+</ul>
+</li>
+</ul><h4>
+<a name="member" class="anchor" href="#member"><span class="octicon octicon-link"></span></a><code>member</code>
+</h4>
+
+<p>Possible values:</p>
+
+<ul>
+<li>
+<code>true</code>
+
+<ul>
+<li>Will create a new cache per logged in member</li>
+</ul>
+</li>
+<li>
+<code>any</code>
+
+<ul>
+<li>Will create a new cache members as a group (and another key when a person is not logged in)</li>
+</ul>
+</li>
+</ul><h4>
+<a name="versions" class="anchor" href="#versions"><span class="octicon octicon-link"></span></a><code>versions</code>
+</h4>
+
+<p>Possible values:</p>
+
+<ul>
+<li>(int)
+
+<ul>
+<li>Set this to an integer to make the specified number of versions of the cache</li>
+</ul>
+</li>
+</ul><p>This is useful for when a cache block contains random content, but you still want caching.</p>
+
+<p>e.g. set to 20 to get 20 (potentially) different version of a cache block.</p>
+
+<p>Cache invalidation options</p>
+
+<h4>
+<a name="contains" class="anchor" href="#contains"><span class="octicon octicon-link"></span></a><code>contains</code>
+</h4>
+
+<ul>
+<li>(array)
+
+<ul>
+<li>An array of class names that if a record saved matches the cache will invalidate</li>
+</ul>
+</li>
+</ul><h4>
+<a name="invalidation_rules" class="anchor" href="#invalidation_rules"><span class="octicon octicon-link"></span></a><code>invalidation_rules</code>
+</h4>
+
+<ul>
+<li>(array)
+
+<ul>
+<li>An array of rules written in the available expression language. If a rule is matched the cache will invalidate</li>
+</ul>
+</li>
+</ul><p>The Expression Language is provided by Symfony, but also has the following available:</p>
+
+<h5>
+<a name="variables" class="anchor" href="#variables"><span class="octicon octicon-link"></span></a>Variables</h5>
+
+<ul>
+<li><code>item</code></li>
+<li><code>action</code></li>
+</ul><h5>
+<a name="functions" class="anchor" href="#functions"><span class="octicon octicon-link"></span></a>Functions</h5>
+
+<ul>
+<li><code>list()</code></li>
+<li><code>instanceof()</code></li>
+</ul><p>Theses can be used to do the following:</p>
+
+<pre><code>  invalidation_rules:
+    - "instanceof(item, 'CreativeProfile') and item.ID in list('CreativeProfile').sort('Created DESC').limit(4).getIDList()"
+</code></pre>
+
+<h2>
+<a name="full-request-caching" class="anchor" href="#full-request-caching"><span class="octicon octicon-link"></span></a>Full request caching</h2>
+
+<p>CacheInclude comes with a <code>RequestCache</code> service that can be added to cache full request objects for use in high load
+sites.</p>
+
+<h3>
+<a name="enabling-1" class="anchor" href="#enabling-1"><span class="octicon octicon-link"></span></a>Enabling</h3>
+
+<p>To enable the full request cache the <code>RequestCache</code> service needs to be added to the <code>RequestProcessor</code> as a filter.</p>
+
+<div class="highlight highlight-yml"><pre><span class="l-Scalar-Plain">Injector</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">RequestProcessor</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">class</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">RequestProcessor</span>
+    <span class="l-Scalar-Plain">properties</span><span class="p-Indicator">:</span>
+      <span class="l-Scalar-Plain">filters</span><span class="p-Indicator">:</span>
+        <span class="p-Indicator">-</span> <span class="s">'%$RequestCache'</span>
+</pre></div>
+
+<p>Full request caching increases performance substantially but it isn't without a cost. It can be hard to configure, as there
+are numerous cases where you don't want to either cache a request or alternatively serve a cached request.</p>
+
+<p>To help in this there is quite a bit you can do out of the box to configure the way that caching is handled.</p>
+
+<p>The following gives some demonstration of how to configure things and what you can do:</p>
+
+<div class="highlight highlight-yml"><pre><span class="l-Scalar-Plain">Injector</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">RequestCache</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">class</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Heyday\CacheInclude\RequestCache</span>
+    <span class="l-Scalar-Plain">constructor</span><span class="p-Indicator">:</span>
+      <span class="l-Scalar-Plain">0</span><span class="p-Indicator">:</span> <span class="s">'%$CacheInclude'</span>
+      <span class="l-Scalar-Plain">1</span><span class="p-Indicator">:</span> <span class="s">'%$CacheIncludeExpressionLanguage'</span>
+      <span class="l-Scalar-Plain">2</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Global</span>
+    <span class="l-Scalar-Plain">properties</span><span class="p-Indicator">:</span>
+      <span class="c1"># Add here any security token services that shouldn't be cached within the request</span>
+      <span class="c1"># Each token from this list that appears in cached content will be swapped out with a dummy string</span>
+      <span class="c1"># This dummy string will be replaced with a real token when a cache is served</span>
+      <span class="l-Scalar-Plain">Tokens</span><span class="p-Indicator">:</span>
+        <span class="p-Indicator">-</span> <span class="s">'%$SecurityToken'</span>
+
+      <span class="c1"># Expression language rules:</span>
+      <span class="c1"># Add here any rules that should cause a request to not have a cache saved</span>
+      <span class="l-Scalar-Plain">SaveExcludeRules</span><span class="p-Indicator">:</span>
+        <span class="p-Indicator">-</span> <span class="s">'request.getUrl()</span><span class="nv"> </span><span class="s">matches</span><span class="nv"> </span><span class="s">"/^\\/admin|dev/"'</span>
+
+      <span class="c1"># Add here any rules that must pass in order for a request to have a cache saved</span>
+      <span class="l-Scalar-Plain">SaveIncludeRules</span><span class="p-Indicator">:</span>
+        <span class="p-Indicator">-</span> <span class="s">"request.httpMethod()</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">'GET'"</span>
+        <span class="p-Indicator">-</span> <span class="s">"response.getStatusCode()</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">200"</span>
+
+      <span class="c1"># Add here any rules that should cause a request to not have a cache served</span>
+      <span class="l-Scalar-Plain">FetchExcludeRules</span><span class="p-Indicator">:</span>
+        <span class="p-Indicator">-</span> <span class="s">'request.getUrl()</span><span class="nv"> </span><span class="s">matches</span><span class="nv"> </span><span class="s">"/^\\/admin|dev/"'</span>
+
+      <span class="c1"># Add here any rules that must pass in order for a request to have a cache served</span>
+      <span class="l-Scalar-Plain">FetchIncludeRules</span><span class="p-Indicator">:</span>
+        <span class="p-Indicator">-</span> <span class="s">"request.httpMethod()</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">'GET'"</span>
+</pre></div>
+
+<p>As you can see above there are some variables made accessible to you in the expression language.</p>
+
+<p>The following is made available in the "Save" rules:</p>
+
+<ul>
+<li><code>request</code></li>
+<li><code>response</code></li>
+<li><code>member</code></li>
+<li><code>session</code></li>
+</ul><p>The following is made available in the "Fetch" rules:</p>
+
+<ul>
+<li><code>request</code></li>
+<li><code>member</code></li>
+<li><code>session</code></li>
+</ul><p>Additional variables can be provided through the injector system.</p>
+
+<div class="highlight highlight-yml"><pre><span class="l-Scalar-Plain">Injector</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">RequestCache</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">properties</span><span class="p-Indicator">:</span>
+      <span class="l-Scalar-Plain">ExtraExpressionVars</span><span class="p-Indicator">:</span>
+        <span class="s">'hello'</span><span class="p-Indicator">:</span> <span class="s">'Something'</span>
+</pre></div>
+
+<h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>SilverStripe CacheInclude is released under the <a href="http://heyday.mit-license.org/">MIT license</a></p>
+
+<h2>
+<a name="contributing" class="anchor" href="#contributing"><span class="octicon octicon-link"></span></a>Contributing</h2>
+
+<h3>
+<a name="unit-testing" class="anchor" href="#unit-testing"><span class="octicon octicon-link"></span></a>Unit Testing</h3>
+
+<div class="highlight highlight-bash"><pre><span class="nv">$ </span>composer install --prefer-dist --dev
+<span class="nv">$ </span>phpunit
+</pre></div>
+
+<h3>
+<a name="code-guidelines" class="anchor" href="#code-guidelines"><span class="octicon octicon-link"></span></a>Code guidelines</h3>
+
+<p>This project follows the standards defined in:</p>
+
+<ul>
+<li><a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md">PSR-0</a></li>
+<li><a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md">PSR-1</a></li>
+<li><a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md">PSR-2</a></li>
+</ul><p>Run the following before contributing:</p>
+
+<div class="highlight highlight-bash"><pre><span class="nv">$ </span>php-cs-fixer fix .
+</pre></div>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/heyday">heyday</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
