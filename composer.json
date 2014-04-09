@@ -1,0 +1,6 @@
+{
+    "require": {
+        "heyday/silverstripe-cacheinclude": "dev-master",
+        "sami/sami": "dev-master"
+    }
+}

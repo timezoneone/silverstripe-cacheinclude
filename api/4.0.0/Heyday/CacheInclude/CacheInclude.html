@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="robots" content="index, follow, all" />
+        <title>Heyday\CacheInclude\CacheInclude | </title>
+                    <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+                            </head>
+        <body id="class">
+            <div class="header">
+        <ul>
+            <li><a href="../../classes.html">Classes</a></li>
+                            <li><a href="../../namespaces.html">Namespaces</a></li>
+                        <li><a href="../../interfaces.html">Interfaces</a></li>
+            <li><a href="../../traits.html">Traits</a></li>
+            <li><a href="../../doc-index.html">Index</a></li>
+            
+        </ul>
+
+        <div id="title"></div>
+
+            <div class="type">Class</div>
+    <h1><a href="../../Heyday/CacheInclude.html">Heyday\CacheInclude</a>\CacheInclude</h1>
+    </div>
+        <div class="content">
+                <p>    class
+    <strong>CacheInclude</strong></p>
+
+            <div class="description">
+            <p>Class CacheInclude</p>
+            <p>
+</p>
+        </div>
+    
+    
+    
+            <h2>Methods</h2>
+
+            <table>
+                    <tr>
+                <td class="type">
+                    
+                </td>
+                <td class="last">
+                    <a href="#method___construct">__construct</a>(<abbr title="Doctrine\Common\Cache\CacheProvider">CacheProvider</abbr> $cache, <a href="../../Heyday/CacheInclude/Configs/ConfigInterface.html"><abbr title="Heyday\CacheInclude\Configs\ConfigInterface">ConfigInterface</abbr></a> $config, bool $forceExpire = false)
+                    <p>
+</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    
+                </td>
+                <td class="last">
+                    <a href="#method_setEnabled">setEnabled</a>(<abbr title="Heyday\CacheInclude\$enabled">$enabled</abbr> $enabled)
+                    <p>Set the cache to enabled or disabled</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    bool
+                </td>
+                <td class="last">
+                    <a href="#method_getEnabled">getEnabled</a>()
+                    <p>Return whether the cache is enabled or disabled</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    
+                </td>
+                <td class="last">
+                    <a href="#method_setDefaultConfig">setDefaultConfig</a>(<abbr title="Heyday\CacheInclude\$config">$config</abbr> $config)
+                    <p>Set the default config</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    array
+                </td>
+                <td class="last">
+                    <a href="#method_getDefaultConfig">getDefaultConfig</a>()
+                    <p>Return the default config</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    <a href="../../Heyday/CacheInclude/Configs/ConfigInterface.html"><abbr title="Heyday\CacheInclude\Configs\ConfigInterface">ConfigInterface</abbr></a>
+                </td>
+                <td class="last">
+                    <a href="#method_getConfig">getConfig</a>()
+                    <p>Get the config</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    
+                </td>
+                <td class="last">
+                    <a href="#method_setForceExpire">setForceExpire</a>(<abbr title="Heyday\CacheInclude\$forceExpire">$forceExpire</abbr> $forceExpire)
+                    <p>Set the force expiry flag</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    bool
+                </td>
+                <td class="last">
+                    <a href="#method_getForceExpire">getForceExpire</a>()
+                    <p>Get the force expire flag</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    
+                </td>
+                <td class="last">
+                    <a href="#method_setLogger">setLogger</a>(<abbr title="Psr\Log\LoggerInterface">LoggerInterface</abbr> $logger)
+                    <p>
+</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    <abbr title="Psr\Log\LoggerInterface">LoggerInterface</abbr>
+                </td>
+                <td class="last">
+                    <a href="#method_getLogger">getLogger</a>()
+                    <p>
+</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    mixed
+                </td>
+                <td class="last">
+                    <a href="#method_getCombinedConfig">getCombinedConfig</a>(<abbr title="Heyday\CacheInclude\$name">$name</abbr> $name)
+                    <p>Get the default config combined with the provided config</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    mixed|null
+                </td>
+                <td class="last">
+                    <a href="#method_process">process</a>(<abbr title="Heyday\CacheInclude\$name">$name</abbr> $name, <abbr title="Heyday\CacheInclude\$processor">$processor</abbr> $processor, <a href="../../Heyday/CacheInclude/KeyCreators/KeyCreatorInterface.html"><abbr title="Heyday\CacheInclude\KeyCreators\KeyCreatorInterface">KeyCreatorInterface</abbr></a> $keyCreator)
+                    <p>
+</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    mixed
+                </td>
+                <td class="last">
+                    <a href="#method_get">get</a>(<abbr title="Heyday\CacheInclude\$name">$name</abbr> $name, <a href="../../Heyday/CacheInclude/KeyCreators/KeyCreatorInterface.html"><abbr title="Heyday\CacheInclude\KeyCreators\KeyCreatorInterface">KeyCreatorInterface</abbr></a> $keyCreator)
+                    <p>
+</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    
+                </td>
+                <td class="last">
+                    <a href="#method_set">set</a>(<abbr title="Heyday\CacheInclude\$name">$name</abbr> $name, <abbr title="Heyday\CacheInclude\$result">$result</abbr> $result, <a href="../../Heyday/CacheInclude/KeyCreators/KeyCreatorInterface.html"><abbr title="Heyday\CacheInclude\KeyCreators\KeyCreatorInterface">KeyCreatorInterface</abbr></a> $keyCreator)
+                    <p>
+</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    
+                </td>
+                <td class="last">
+                    <a href="#method_flushByName">flushByName</a>(<abbr title="Heyday\CacheInclude\$name">$name</abbr> $name)
+                    <p>
+</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    
+                </td>
+                <td class="last">
+                    <a href="#method_flushAll">flushAll</a>()
+                    <p>
+</p>
+                </td>
+                <td></td>
+            </tr>
+            </table>
+
+
+        <h2>Details</h2>
+
+                        <h3 id="method___construct">
+        <div class="location">at line 58</div>
+        <code>            public            
+    <strong>__construct</strong>(<abbr title="Doctrine\Common\Cache\CacheProvider">CacheProvider</abbr> $cache, <a href="../../Heyday/CacheInclude/Configs/ConfigInterface.html"><abbr title="Heyday\CacheInclude\Configs\ConfigInterface">ConfigInterface</abbr></a> $config, bool $forceExpire = false)</code>
+    </h3>
+    <div class="details">
+        <p>
+</p>
+        <p>
+</p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td><abbr title="Doctrine\Common\Cache\CacheProvider">CacheProvider</abbr></td>
+                <td>$cache</td>
+                <td>
+</td>
+            </tr>
+                    <tr>
+                <td><a href="../../Heyday/CacheInclude/Configs/ConfigInterface.html"><abbr title="Heyday\CacheInclude\Configs\ConfigInterface">ConfigInterface</abbr></a></td>
+                <td>$config</td>
+                <td>
+</td>
+            </tr>
+                    <tr>
+                <td>bool</td>
+                <td>$forceExpire</td>
+                <td>
+</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_setEnabled">
+        <div class="location">at line 73</div>
+        <code>            public            
+    <strong>setEnabled</strong>(<abbr title="Heyday\CacheInclude\$enabled">$enabled</abbr> $enabled)</code>
+    </h3>
+    <div class="details">
+        <p>Set the cache to enabled or disabled</p>
+        <p>
+</p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td><abbr title="Heyday\CacheInclude\$enabled">$enabled</abbr></td>
+                <td>$enabled</td>
+                <td>
+</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_getEnabled">
+        <div class="location">at line 82</div>
+        <code>            public            bool
+    <strong>getEnabled</strong>()</code>
+    </h3>
+    <div class="details">
+        <p>Return whether the cache is enabled or disabled</p>
+        <p>
+</p>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td>bool</td>
+            <td>
+</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_setDefaultConfig">
+        <div class="location">at line 91</div>
+        <code>            public            
+    <strong>setDefaultConfig</strong>(<abbr title="Heyday\CacheInclude\$config">$config</abbr> $config)</code>
+    </h3>
+    <div class="details">
+        <p>Set the default config</p>
+        <p>
+</p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td><abbr title="Heyday\CacheInclude\$config">$config</abbr></td>
+                <td>$config</td>
+                <td>
+</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_getDefaultConfig">
+        <div class="location">at line 100</div>
+        <code>            public            array
+    <strong>getDefaultConfig</strong>()</code>
+    </h3>
+    <div class="details">
+        <p>Return the default config</p>
+        <p>
+</p>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td>array</td>
+            <td>
+</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_getConfig">
+        <div class="location">at line 109</div>
+        <code>            public            <a href="../../Heyday/CacheInclude/Configs/ConfigInterface.html"><abbr title="Heyday\CacheInclude\Configs\ConfigInterface">ConfigInterface</abbr></a>
+    <strong>getConfig</strong>()</code>
+    </h3>
+    <div class="details">
+        <p>Get the config</p>
+        <p>
+</p>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td><a href="../../Heyday/CacheInclude/Configs/ConfigInterface.html"><abbr title="Heyday\CacheInclude\Configs\ConfigInterface">ConfigInterface</abbr></a></td>
+            <td>
+</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_setForceExpire">
+        <div class="location">at line 118</div>
+        <code>            public            
+    <strong>setForceExpire</strong>(<abbr title="Heyday\CacheInclude\$forceExpire">$forceExpire</abbr> $forceExpire)</code>
+    </h3>
+    <div class="details">
+        <p>Set the force expiry flag</p>
+        <p>
+</p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td><abbr title="Heyday\CacheInclude\$forceExpire">$forceExpire</abbr></td>
+                <td>$forceExpire</td>
+                <td>
+</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_getForceExpire">
+        <div class="location">at line 127</div>
+        <code>            public            bool
+    <strong>getForceExpire</strong>()</code>
+    </h3>
+    <div class="details">
+        <p>Get the force expire flag</p>
+        <p>
+</p>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td>bool</td>
+            <td>
+</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_setLogger">
+        <div class="location">at line 135</div>
+        <code>            public            
+    <strong>setLogger</strong>(<abbr title="Psr\Log\LoggerInterface">LoggerInterface</abbr> $logger)</code>
+    </h3>
+    <div class="details">
+        <p>
+</p>
+        <p>
+</p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td><abbr title="Psr\Log\LoggerInterface">LoggerInterface</abbr></td>
+                <td>$logger</td>
+                <td>
+</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_getLogger">
+        <div class="location">at line 143</div>
+        <code>            public            <abbr title="Psr\Log\LoggerInterface">LoggerInterface</abbr>
+    <strong>getLogger</strong>()</code>
+    </h3>
+    <div class="details">
+        <p>
+</p>
+        <p>
+</p>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td><abbr title="Psr\Log\LoggerInterface">LoggerInterface</abbr></td>
+            <td>
+</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_getCombinedConfig">
+        <div class="location">at line 154</div>
+        <code>            public            mixed
+    <strong>getCombinedConfig</strong>(<abbr title="Heyday\CacheInclude\$name">$name</abbr> $name)</code>
+    </h3>
+    <div class="details">
+        <p>Get the default config combined with the provided config</p>
+        <p>
+</p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td><abbr title="Heyday\CacheInclude\$name">$name</abbr></td>
+                <td>$name</td>
+                <td>
+</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td>mixed</td>
+            <td>
+</td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table>
+                    <tr>
+                <td><a href="http://php.net/RuntimeException"><abbr title="RuntimeException">RuntimeException</abbr></a></td>
+                <td>
+</td>
+            </tr>
+            </table>
+
+            
+                    </div>
+    </div>
+
+                <h3 id="method_process">
+        <div class="location">at line 184</div>
+        <code>            public            mixed|null
+    <strong>process</strong>(<abbr title="Heyday\CacheInclude\$name">$name</abbr> $name, <abbr title="Heyday\CacheInclude\$processor">$processor</abbr> $processor, <a href="../../Heyday/CacheInclude/KeyCreators/KeyCreatorInterface.html"><abbr title="Heyday\CacheInclude\KeyCreators\KeyCreatorInterface">KeyCreatorInterface</abbr></a> $keyCreator)</code>
+    </h3>
+    <div class="details">
+        <p>
+</p>
+        <p>
+</p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td><abbr title="Heyday\CacheInclude\$name">$name</abbr></td>
+                <td>$name</td>
+                <td>
+</td>
+            </tr>
+                    <tr>
+                <td><abbr title="Heyday\CacheInclude\$processor">$processor</abbr></td>
+                <td>$processor</td>
+                <td>
+</td>
+            </tr>
+                    <tr>
+                <td><a href="../../Heyday/CacheInclude/KeyCreators/KeyCreatorInterface.html"><abbr title="Heyday\CacheInclude\KeyCreators\KeyCreatorInterface">KeyCreatorInterface</abbr></a></td>
+                <td>$keyCreator</td>
+                <td>
+</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td>mixed|null</td>
+            <td>
+</td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table>
+                    <tr>
+                <td><a href="http://php.net/InvalidArgumentException"><abbr title="InvalidArgumentException">InvalidArgumentException</abbr></a></td>
+                <td>
+</td>
+            </tr>
+            </table>
+
+            
+                    </div>
+    </div>
+
+                <h3 id="method_get">
+        <div class="location">at line 228</div>
+        <code>            public            mixed
+    <strong>get</strong>(<abbr title="Heyday\CacheInclude\$name">$name</abbr> $name, <a href="../../Heyday/CacheInclude/KeyCreators/KeyCreatorInterface.html"><abbr title="Heyday\CacheInclude\KeyCreators\KeyCreatorInterface">KeyCreatorInterface</abbr></a> $keyCreator)</code>
+    </h3>
+    <div class="details">
+        <p>
+</p>
+        <p>
+</p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td><abbr title="Heyday\CacheInclude\$name">$name</abbr></td>
+                <td>$name</td>
+                <td>
+</td>
+            </tr>
+                    <tr>
+                <td><a href="../../Heyday/CacheInclude/KeyCreators/KeyCreatorInterface.html"><abbr title="Heyday\CacheInclude\KeyCreators\KeyCreatorInterface">KeyCreatorInterface</abbr></a></td>
+                <td>$keyCreator</td>
+                <td>
+</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td>mixed</td>
+            <td>
+</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_set">
+        <div class="location">at line 247</div>
+        <code>            public            
+    <strong>set</strong>(<abbr title="Heyday\CacheInclude\$name">$name</abbr> $name, <abbr title="Heyday\CacheInclude\$result">$result</abbr> $result, <a href="../../Heyday/CacheInclude/KeyCreators/KeyCreatorInterface.html"><abbr title="Heyday\CacheInclude\KeyCreators\KeyCreatorInterface">KeyCreatorInterface</abbr></a> $keyCreator)</code>
+    </h3>
+    <div class="details">
+        <p>
+</p>
+        <p>
+</p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td><abbr title="Heyday\CacheInclude\$name">$name</abbr></td>
+                <td>$name</td>
+                <td>
+</td>
+            </tr>
+                    <tr>
+                <td><abbr title="Heyday\CacheInclude\$result">$result</abbr></td>
+                <td>$result</td>
+                <td>
+</td>
+            </tr>
+                    <tr>
+                <td><a href="../../Heyday/CacheInclude/KeyCreators/KeyCreatorInterface.html"><abbr title="Heyday\CacheInclude\KeyCreators\KeyCreatorInterface">KeyCreatorInterface</abbr></a></td>
+                <td>$keyCreator</td>
+                <td>
+</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_flushByName">
+        <div class="location">at line 293</div>
+        <code>            public            
+    <strong>flushByName</strong>(<abbr title="Heyday\CacheInclude\$name">$name</abbr> $name)</code>
+    </h3>
+    <div class="details">
+        <p>
+</p>
+        <p>
+</p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td><abbr title="Heyday\CacheInclude\$name">$name</abbr></td>
+                <td>$name</td>
+                <td>
+</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_flushAll">
+        <div class="location">at line 305</div>
+        <code>            public            
+    <strong>flushAll</strong>()</code>
+    </h3>
+    <div class="details">
+        <p>
+</p>
+        <p>
+</p>
+        <div class="tags">
+            
+            
+            
+                    </div>
+    </div>
+
+    
+            </div>
+            <div id="footer">
+        Generated by <a href="http://sami.sensiolabs.org/" target="_top">Sami, the API Documentation Generator</a>.
+    </div>
+    </body>
+</html>
