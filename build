@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+composer update --prefer-dist
+php vendor/bin/sami.php update silverstripe-cacheinclude/.sami
+cd silverstripe-cacheinclude/
+composer install --prefer-dist
+phpunit  --coverage-html=../coverage/

@@ -7,16 +7,16 @@
     "packages": [
         {
             "name": "composer/installers",
-            "version": "v1.0.12",
+            "version": "v1.0.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/installers.git",
-                "reference": "4127333b03e8b4c08d081958548aae5419d1a2fa"
+                "reference": "26d37e307f9aa6e2e81806a6525666f8ab5ba0ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/installers/zipball/4127333b03e8b4c08d081958548aae5419d1a2fa",
-                "reference": "4127333b03e8b4c08d081958548aae5419d1a2fa",
+                "url": "https://api.github.com/repos/composer/installers/zipball/26d37e307f9aa6e2e81806a6525666f8ab5ba0ff",
+                "reference": "26d37e307f9aa6e2e81806a6525666f8ab5ba0ff",
                 "shasum": ""
             },
             "replace": {
@@ -87,7 +87,7 @@
                 "zend",
                 "zikula"
             ],
-            "time": "2014-02-24 04:21:34"
+            "time": "2014-04-09 16:12:43"
         },
         {
             "name": "doctrine/cache",
@@ -169,7 +169,7 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:heyday/silverstripe-cacheinclude.git",
-                "reference": "6a7b295dbd5a37bacb164ee832ef86ac95601570"
+                "reference": "db871451e1a42979bb96cd529bfb993b573d6bf4"
             },
             "require": {
                 "composer/installers": "~1.0",
@@ -204,7 +204,7 @@
                     "homepage": "https://github.com/stecman/"
                 }
             ],
-            "time": "2014-04-09 09:38:16"
+            "time": "2014-04-09 23:06:35"
         },
         {
             "name": "michelf/php-markdown",
