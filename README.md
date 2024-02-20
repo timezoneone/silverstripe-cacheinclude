@@ -15,6 +15,7 @@ Template caching based on urls not DB queries.
 * A full request cache that includes the ability to substitute security tokens
 * Highly customisable
 * CacheInclude Manager for easy cache management https://github.com/heyday/silverstripe-cacheinclude-manager/
+* Sets request header when cache is hit for easier testing e.g hit at Thu, 03 Mar 2022 14:23:41 -0600
 
 For a SilverStripe `2.4` compatible version, see the `2.0.4` tag.
 
@@ -25,6 +26,13 @@ $ composer require heyday/silverstripe-cacheinclude:~5.0
 ```
 
 ## How to use
+
+### Clearing the cache
+There is a dev/task which can be used to clear the cache.
+
+```bash
+$ vendor/bin/sake dev/tasks/CacheIncludeClearTask all=1
+```
 
 ### Enabling
 
@@ -41,6 +49,7 @@ SilverStripe\ORM\DataObject:
   extensions:
     - Heyday\CacheInclude\SilverStripe\InvalidationExtension
 ```
+
 
 ### Template Usage
 
@@ -171,6 +180,7 @@ Theses can be used to do the following:
 
 CacheInclude comes with a `RequestCache` service that can be added to cache full request objects for use in high load
 sites.
+
 
 ### Enabling
 
