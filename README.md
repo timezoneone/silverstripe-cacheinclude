@@ -27,6 +27,13 @@ $ composer require heyday/silverstripe-cacheinclude:~5.0
 
 ## How to use
 
+### Clearing the cache
+There is a dev/task which can be used to clear the cache.
+
+```bash
+$ vendor/bin/sake dev/tasks/CacheIncludeClearTask all=1
+```
+
 ### Enabling
 
 To  be able to invalidate caches from DataObject writes, add the `InvalidationExtension`:
