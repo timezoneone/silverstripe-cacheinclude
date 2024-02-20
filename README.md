@@ -50,6 +50,7 @@ SilverStripe\ORM\DataObject:
     - Heyday\CacheInclude\SilverStripe\InvalidationExtension
 ```
 
+
 ### Template Usage
 
 Cache a section of a template:
@@ -179,6 +180,7 @@ Theses can be used to do the following:
 
 CacheInclude comes with a `RequestCache` service that can be added to cache full request objects for use in high load
 sites.
+
 
 ### Enabling
 
